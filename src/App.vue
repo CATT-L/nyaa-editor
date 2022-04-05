@@ -1,13 +1,12 @@
 <template>
-  <hello-world msg="Hello,world!" />
+  <editor></editor>
 </template>
 
 <script>
-
 export default {
   name: "App",
   components: {
-    "hello-world": require("@/components/HelloWorld.vue").default,
+    editor: require("@/components/editor").default,
   },
 };
 </script>
