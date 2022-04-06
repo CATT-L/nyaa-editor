@@ -2,17 +2,22 @@
   <div style="height: 100%">
     <el-container>
       <el-header>
-        <div style="display: flex">
-          <div style="flex-grow: 1">
-            <h1>Markdown Editor</h1>
-          </div>
-          <div style="flex-grow: 0"></div>
-        </div>
+        <div style="font-size: 2rem;">Markdown Editor</div>
       </el-header>
       <el-container>
-        <!-- <el-aside width="200px">Aside</el-aside> -->
+        <el-aside width="280px">
+          
+          <div style="background: #eee; height: 100%;">
+            <project-tree></project-tree>
+          </div>
+
+
+        </el-aside>
         <el-container>
           <el-main>
+
+            <el-button>button</el-button>
+            
             <el-row :gutter="15" style="height: 100%">
               <el-col :span="12">
                 <el-input
@@ -56,10 +61,12 @@ import MarkdownIt from "markdown-it";
 import "@/assets/themes/github.css";
 
 export default {
+  components: {
+    'project-tree': require('./project-tree').default,
+  },
   data() {
     return {
       source: "",
-      html: "",
       mdit: new MarkdownIt(),
     };
   },
@@ -81,4 +88,3 @@ export default {
   max-width: 100%;
 }
 </style>
-
