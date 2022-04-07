@@ -11,6 +11,24 @@
           </div>
         </el-aside>
         <el-container>
+          <el-header class="my-tab" style="height: auto; padding: 0;">
+            <el-tabs
+              v-model="editableTabsValue"
+              type="card"
+              class="demo-tabs"
+              closable
+              @tab-remove="removeTab"
+              @contextmenu.prevent=""
+            >
+              <el-tab-pane
+                v-for="item in editableTabs"
+                :key="item.name"
+                :label="item.title"
+                :name="item.name"
+              >
+              </el-tab-pane>
+            </el-tabs>
+          </el-header>
           <el-main
             style="
               position: relative;
@@ -75,6 +93,20 @@ export default {
       source: "",
       mdit: new MarkdownIt(),
       timerAutoSave: null,
+
+      editableTabsValue: "1",
+      editableTabs: [
+        {
+          title: "Tab 1",
+          name: "1",
+          content: "Tab 1 content",
+        },
+        {
+          title: "Tab 2",
+          name: "2",
+          content: "Tab 2 content",
+        },
+      ],
     };
   },
   computed: {
@@ -109,11 +141,29 @@ export default {
     handleSave() {
       localStorage.source = JSON.stringify(this.source);
     },
+
+    removeTab() {
+      console.log("editableTabsValue");
+    },
   },
 };
 </script>
 
 <style>
+
+.my-tab .el-tabs__content {
+  display: none;
+}
+
+.my-tab .el-tabs__header {
+  margin: 0;
+}
+
+.my-tab .el-tabs__item {
+  height: 35px;
+  line-height: 35px;
+}
+
 .el-container {
   height: 100%;
 }
@@ -139,5 +189,28 @@ export default {
 .result pre code {
   background: none;
   border: none;
+}
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+  border-left: 1px solid #888;
+  border-top: 1px solid #888;
+}
+
+th,
+td {
+  border-right: 1px solid #888;
+  border-bottom: 1px solid #888;
+  padding: 5px 15px;
+}
+
+th {
+  font-weight: bold;
+}
+
+hr {
+  height: 0;
+  border-color: #eee;
 }
 </style>
