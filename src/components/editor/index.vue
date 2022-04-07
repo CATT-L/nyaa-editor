@@ -7,11 +7,11 @@
       <el-container>
         <el-aside width="280px">
           <div style="background: #eee; height: 100%">
-            <project-tree></project-tree>
+            <directory-tree></directory-tree>
           </div>
         </el-aside>
         <el-container>
-          <el-header class="my-tab" style="height: auto; padding: 0;">
+          <el-header class="my-tab" style="height: auto; padding: 0">
             <el-tabs
               v-model="editableTabsValue"
               type="card"
@@ -86,7 +86,7 @@ import "@/assets/themes/github.css";
 
 export default {
   components: {
-    "project-tree": require("./project-tree").default,
+    "directory-tree": require("@/components/directory-tree").default,
   },
   data() {
     return {
@@ -150,7 +150,6 @@ export default {
 </script>
 
 <style>
-
 .my-tab .el-tabs__content {
   display: none;
 }

@@ -1,15 +1,20 @@
 <template>
   <el-tree
-    style="user-select: none"
+    class="directory-tree no-select"
     draggable
     :data="treeData"
     :props="defaultProps"
     @node-click="handleNodeClick"
     @node-contextmenu="handleNodeContextMenu"
-  />
+  >
+  </el-tree>
 
-  <div v-if="contextMenuVisible" @click="contextMenuVisible = false" @contextmenu.prevent="contextMenuVisible = false" style="position: fixed; z-index: 100; width: 100%; height: 100%; top: 0; left: 0; background: rgba(255, 0, 0, 0);">
-  </div>
+  <div
+    class="context-menu-mask"
+    v-if="contextMenuVisible"
+    @click="contextMenuVisible = false"
+    @contextmenu.prevent="contextMenuVisible = false"
+  ></div>
 </template>
 
 <script>
@@ -80,11 +85,11 @@ export default {
       ],
     };
   },
+
   methods: {
     onContextMenu(e) {
       console.log("x");
       this.$contextmenu({
-        
         x: e.x,
         y: e.y,
         items: [
@@ -128,7 +133,7 @@ export default {
             label: "A submenu",
             disabled: true,
             children: [
-              { label: "Item1", disabled: true, },
+              { label: "Item1", disabled: true },
               { label: "Item2" },
               { label: "Item3" },
             ],
@@ -136,7 +141,7 @@ export default {
           {
             label: "A submenu",
             children: [
-              { label: "Item1", disabled: true, },
+              { label: "Item1", disabled: true },
               { label: "Item2" },
               { label: "Item3" },
             ],
@@ -158,3 +163,15 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.context-menu-mask {
+  position: fixed;
+  z-index: 100;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  background: rgba(255, 0, 0, 0);
+}
+</style>
