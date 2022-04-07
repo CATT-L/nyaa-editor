@@ -24,141 +24,202 @@ export default {
       contextMenuVisible: false,
       defaultProps: {
         children: "children",
-        label: "label",
+        label: "name",
       },
       treeData: [
         {
-          label: "Level one 1",
+          name: "public",
+          isDir: true,
           children: [
             {
-              label: "Level two 1-1",
-              children: [
-                {
-                  label: "Level three 1-1-1",
-                },
-              ],
+              name: "favicon.ico",
+              isDir: false,
+            },
+            {
+              name: "index.html",
+              isDir: false,
             },
           ],
         },
         {
-          label: "Level one 2",
+          name: "src",
+          isDir: true,
           children: [
             {
-              label: "Level two 2-1",
+              name: "assets",
+              isDir: true,
               children: [
                 {
-                  label: "Level three 2-1-1",
+                  name: "logo.png",
+                  isDir: false,
                 },
               ],
             },
             {
-              label: "Level two 2-2",
-              children: [
-                {
-                  label: "Level three 2-2-1",
-                },
-              ],
+              name: "App.vue",
+              isDir: false,
+            },
+            {
+              name: "main.js",
+              isDir: false,
             },
           ],
         },
         {
-          label: "Level one 3",
-          children: [
-            {
-              label: "Level two 3-1",
-              children: [
-                {
-                  label: "Level three 3-1-1",
-                },
-              ],
-            },
-            {
-              label: "Level two 3-2",
-              children: [
-                {
-                  label: "Level three 3-2-1",
-                },
-              ],
-            },
-          ],
+          name: "package.json",
+          isDir: false,
+        },
+        {
+          name: "README.md",
+          isDir: false,
+        },
+        {
+          name: "vue.config.js",
+          isDir: false,
         },
       ],
     };
   },
 
   methods: {
-    onContextMenu(e) {
-      console.log("x");
-      this.$contextmenu({
-        x: e.x,
-        y: e.y,
-        items: [
-          {
-            label: "A menu item",
-            onClick: () => {
-              alert("You click a menu item");
-            },
-          },
-          {
-            label: "A submenu",
-            children: [
-              { label: "Item1" },
-              { label: "Item2" },
-              { label: "Item3" },
-            ],
-          },
-        ],
-      });
-    },
     handleNodeClick(item, node, tree) {
-      console.log("node click: " + item.label);
+      console.log("node click: " + item.name);
     },
+
     handleNodeContextMenu(e, item, node, tree) {
-      console.log("node right click: " + item.label);
+      console.log("node right click: " + item.name);
 
       this.contextMenuVisible = true;
 
-      this.$contextmenu({
-        zIndex: 200,
-        x: e.clientX,
-        y: e.clientY,
-        items: [
-          {
-            label: "A menu item",
-            onClick: () => {
-              alert("You click a menu item");
+      if (item.isDir) {
+        this.$contextmenu({
+          zIndex: 200,
+          x: e.clientX,
+          y: e.clientY,
+          items: [
+            {
+              label: "New file",
+              onClick: () => this.handleCreateFile(e, item, node, tree),
             },
-          },
-          {
-            label: "A submenu",
-            disabled: true,
-            children: [
-              { label: "Item1", disabled: true },
-              { label: "Item2" },
-              { label: "Item3" },
-            ],
-          },
-          {
-            label: "A submenu",
-            children: [
-              { label: "Item1", disabled: true },
-              { label: "Item2" },
-              { label: "Item3" },
-            ],
-          },
-        ],
-      });
+            {
+              label: "New directory",
+              onClick: () => this.handleCreateDirectory(e, item, node, tree),
+            },
+            {
+              label: "Rename",
+              onClick: () => this.handleRename(e, item, node, tree),
+            },
+            {
+              label: "Delete",
+              onClick: () => this.handleDelete(e, item, node, tree),
+            },
+          ],
+        });
+      } else {
+        this.$contextmenu({
+          zIndex: 200,
+          x: e.clientX,
+          y: e.clientY,
+          items: [
+            {
+              label: "Rename",
+              onClick: () => this.handleRename(e, item, node, tree),
+            },
+            {
+              label: "Delete",
+              onClick: () => this.handleDelete(e, item, node, tree),
+            },
+          ],
+        });
+      }
+    },
 
-      // console.log(`click positon: (${e.clientX}, ${e.clientY})`);
+    handleDelete(e, item, node, tree) {
+      this.$confirm(
+        "Are you sure to delete ' " + item.name + " ' ?",
+        "Warning",
+        {
+          confirmButtonText: "Confirm",
+          cancelButtonText: "Cancel",
+          type: "warning",
+        }
+      )
+        .then(() => {
+          const parent = node.parent;
+          const children = parent.data.children || parent.data;
+          const index = children.findIndex((d) => d.name === item.name);
 
-      // this.contextMenuVisible = true;
+          children.splice(index, 1);
+        })
+        .catch(() => {});
 
-      // this.$nextTick(() => {
-      //   var menu = this.$refs["node-context-menu"];
+      this.contextMenuVisible = false;
+    },
 
-      //   menu.style.left = e.clientX + "px";
-      //   menu.style.top = e.clientY + "px";
-      // });
+    handleRename(e, item, node, tree) {
+      // todo verify the name is duplicated or not
+
+      this.$prompt(
+        `Please input ${item.isDir ? "directory" : "file"} name`,
+        "Rename",
+        {
+          inputValue: item.name,
+          confirmButtonText: "OK",
+          cancelButtonText: "Cancel",
+          inputErrorMessage: "Invalid name",
+        }
+      )
+        .then(({ value }) => {
+          item.name = value;
+        })
+        .catch(() => {});
+    },
+
+    handleCreateFile(e, item, node, tree) {
+      // todo verify name is duplicated or not
+
+      // reload children sort
+
+      this.$prompt("Please input file name", "Create file", {
+        confirmButtonText: "OK",
+        cancelButtonText: "Cancel",
+        inputErrorMessage: "Invalid file name",
+      })
+        .then(({ value }) => {
+          var fileItem = {
+            name: value,
+            isDir: false,
+          };
+
+          node.expand();
+
+          item.children.push(fileItem);
+        })
+        .catch(() => {});
+    },
+
+    handleCreateDirectory(e, item, node, tree) {
+      // todo verify name is duplicated or not
+
+      // todo reload children sort
+
+      this.$prompt("Please input directory name", "Create directory", {
+        confirmButtonText: "OK",
+        cancelButtonText: "Cancel",
+        inputErrorMessage: "Invalid directory name",
+      })
+        .then(({ value }) => {
+          var fileItem = {
+            name: value,
+            isDir: true,
+            children: [],
+          };
+
+          node.expand();
+
+          item.children.push(fileItem);
+        })
+        .catch(() => {});
     },
   },
 };
