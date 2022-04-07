@@ -1,7 +1,7 @@
 <template>
   <div style="height: 100%">
     <el-container>
-      <el-header>
+      <el-header class="no-select">
         <div style="font-size: 2rem">Markdown Editor</div>
       </el-header>
       <el-container>
@@ -15,7 +15,7 @@
             <el-tabs
               v-model="editableTabsValue"
               type="card"
-              class="demo-tabs"
+              class="demo-tabs no-select"
               closable
               @tab-remove="removeTab"
               @contextmenu.prevent=""

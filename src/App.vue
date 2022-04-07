@@ -11,7 +11,6 @@ export default {
 };
 </script>
 
-
 <style>
 html,
 body,
@@ -23,6 +22,10 @@ body,
 
 .full-height {
   height: 100%;
+}
+
+.no-select {
+  user-select: none;
 }
 
 #app {
