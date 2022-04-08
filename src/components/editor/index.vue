@@ -115,6 +115,7 @@ export default {
     },
   },
   mounted() {
+
     this.handleLoad();
 
     this.timerAutoSave = setInterval(() => {
