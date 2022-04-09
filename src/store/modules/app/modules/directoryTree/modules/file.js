@@ -74,6 +74,7 @@ const store = {
             parentId: parentId,
           })
           .filter((r) => r.name.toLowerCase() === name.toLowerCase())
+          .filter((r) => r.id !== item.id)
           .size()
           .value() > 0;
 

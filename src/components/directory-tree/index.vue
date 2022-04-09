@@ -224,12 +224,22 @@ export default {
           cancelButtonText: "Cancel",
           inputErrorMessage: "Invalid name",
         }
-      ).then(async ({ value }) => {
-        await this.$store.dispatch("app/directoryTree/file/rename", {
-          item: item,
-          name: value,
+      )
+        .then(async ({ value }) => {
+          await this.$store.dispatch("app/directoryTree/file/rename", {
+            item: item,
+            name: value,
+          });
+        })
+        .catch((e) => {
+          if (e.message) {
+            this.$message({
+              title: "Error",
+              message: e.message,
+              type: "error",
+            });
+          }
         });
-      });
 
       this.contextMenuVisible = false;
     },
@@ -239,15 +249,25 @@ export default {
         confirmButtonText: "OK",
         cancelButtonText: "Cancel",
         inputErrorMessage: "Invalid file name",
-      }).then(async ({ value }) => {
-        node.expand();
+      })
+        .then(async ({ value }) => {
+          node.expand();
 
-        await this.$store.dispatch("app/directoryTree/file/create", {
-          parent: item,
-          name: value,
-          isDir: false,
+          await this.$store.dispatch("app/directoryTree/file/create", {
+            parent: item,
+            name: value,
+            isDir: false,
+          });
+        })
+        .catch((e) => {
+          if (e.message) {
+            this.$message({
+              title: "Error",
+              message: e.message,
+              type: "error",
+            });
+          }
         });
-      });
 
       this.contextMenuVisible = false;
     },
@@ -257,15 +277,25 @@ export default {
         confirmButtonText: "OK",
         cancelButtonText: "Cancel",
         inputErrorMessage: "Invalid directory name",
-      }).then(async ({ value }) => {
-        node.expand();
+      })
+        .then(async ({ value }) => {
+          node.expand();
 
-        await this.$store.dispatch("app/directoryTree/file/create", {
-          parent: item,
-          name: value,
-          isDir: true,
+          await this.$store.dispatch("app/directoryTree/file/create", {
+            parent: item,
+            name: value,
+            isDir: true,
+          });
+        })
+        .catch((e) => {
+          if (e.message) {
+            this.$message({
+              title: "Error",
+              message: e.message,
+              type: "error",
+            });
+          }
         });
-      });
 
       this.contextMenuVisible = false;
     },
