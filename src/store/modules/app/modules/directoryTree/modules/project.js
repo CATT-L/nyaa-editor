@@ -64,10 +64,18 @@ const store = {
       dispatch("load");
     },
 
-    async delete({ dispatch, state }, { name }) {
+    async delete({ dispatch, state }, { item }) {
       const db = await dispatch("getDb");
 
-      db.remove({ name: name }).write();
+      item.children.forEach(async (r) => {
+        await dispatch(
+          "app/directoryTree/file/delete",
+          { item: r },
+          { root: true }
+        );
+      });
+
+      db.remove({ name: item.name }).write();
 
       dispatch("load");
     },

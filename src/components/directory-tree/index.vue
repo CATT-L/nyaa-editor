@@ -182,7 +182,7 @@ export default {
         );
 
         await this.$store.dispatch("app/directoryTree/project/delete", {
-          name: item.name,
+          item: item,
         });
       } catch (e) {}
 
