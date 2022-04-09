@@ -208,29 +208,21 @@ export default {
     },
 
     async handleRename(e, item, node, tree) {
-      try {
-        var { value } = await this.$prompt(
-          `Please input ${item.isDir ? "directory" : "file"} name`,
-          "Rename",
-          {
-            inputValue: item.name,
-            confirmButtonText: "OK",
-            cancelButtonText: "Cancel",
-            inputErrorMessage: "Invalid name",
-          }
-        );
-
-        var { name } = await this.$store.dispatch(
-          "app/directoryTree/io/rename",
-          {
-            path: this.getPath(node),
-            name: item.name,
-            newName: value,
-          }
-        );
-
-        item.name = name;
-      } catch (e) {}
+      this.$prompt(
+        `Please input ${item.isDir ? "directory" : "file"} name`,
+        "Rename",
+        {
+          inputValue: item.name,
+          confirmButtonText: "OK",
+          cancelButtonText: "Cancel",
+          inputErrorMessage: "Invalid name",
+        }
+      ).then(async ({ value }) => {
+        await this.$store.dispatch("app/directoryTree/file/rename", {
+          item: item,
+          name: value,
+        });
+      });
 
       this.contextMenuVisible = false;
     },

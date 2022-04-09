@@ -61,8 +61,35 @@ const store = {
   },
   mutations: {},
   actions: {
+    async rename({ dispatch, state }, { item, name }) {
+      const db = await dispatch("getDb");
+
+      var projectId = item.projectId;
+      var parentId = item.parentId;
+
+      var isExist =
+        db
+          .filter({
+            projectId: projectId,
+            parentId: parentId,
+          })
+          .filter((r) => r.name.toLowerCase() === name.toLowerCase())
+          .size()
+          .value() > 0;
+
+      if (isExist) {
+        throw new Error(
+          `The file ${name} is already exists in ${parent.name}.`
+        );
+      }
+
+      db.find({ id: item.id }).assign({ name: name }).write();
+
+      dispatch("load");
+    },
+
     async delete({ dispatch, state }, { item }) {
-      this.$log(state, `remove item ${item.name}`, item);
+      this.$log(state, `delete item ${item.name}`, item);
 
       const db = await dispatch("getDb");
 
