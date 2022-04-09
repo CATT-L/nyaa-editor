@@ -38,7 +38,7 @@ const store = {
       // todo verify name is duplicated or not
       // reload children sort
 
-      return { name: name, isDir: false };
+      return { name: name, type: "file", isDir: false };
     },
 
     createDirectory({ dispatch, state }, { path, name }) {
@@ -50,6 +50,7 @@ const store = {
 
       return {
         name: name,
+        type: "dir",
         isDir: true,
         children: [],
       };
@@ -57,7 +58,7 @@ const store = {
 
     rename({ dispatch, state }, { path, name, newName }) {
       this.$log(state, `rename ${name} to ${newName} at ${path}`);
-
+      i;
       // todo verify the name is duplicated or not
 
       return {

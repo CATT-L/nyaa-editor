@@ -6,7 +6,7 @@
       </el-header>
       <el-container>
         <el-aside width="280px">
-          <div style="background: #eee; height: 100%">
+          <div style="height: 100%">
             <directory-tree></directory-tree>
           </div>
         </el-aside>

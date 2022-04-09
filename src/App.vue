@@ -9,9 +9,8 @@ export default {
     editor: require("@/components/editor").default,
   },
   mounted() {
-
     console.log(process.env);
-    
+
     this.$store.dispatch("__autoload");
   },
 };
@@ -32,6 +31,11 @@ body,
 
 .no-select {
   user-select: none;
+}
+
+.el-button[block] {
+  display: block;
+  width: 100%;
 }
 
 #app {

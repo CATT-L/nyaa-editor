@@ -1,20 +1,38 @@
 <template>
-  <el-tree
-    class="directory-tree no-select"
-    draggable
-    :data="treeData"
-    :props="defaultProps"
-    @node-click="handleNodeClick"
-    @node-contextmenu="handleNodeContextMenu"
-  >
-  </el-tree>
+  <div class="container full-height">
+    <div class="title no-select">
+      <div>Explorer</div>
+    </div>
 
-  <div
-    class="context-menu-mask"
-    v-if="contextMenuVisible"
-    @click="contextMenuVisible = false"
-    @contextmenu.prevent="contextMenuVisible = false"
-  ></div>
+    <div class="content">
+      <template v-if="treeData.length <= 0">
+        <div class="panel-empty-project">
+          <el-button @click="handleCreateProject" type="primary" block
+            >Create project</el-button
+          >
+        </div>
+      </template>
+
+      <template v-else>
+        <el-tree
+          class="directory-tree no-select"
+          draggable
+          :data="treeData"
+          :props="defaultProps"
+          @node-click="handleNodeClick"
+          @node-contextmenu="handleNodeContextMenu"
+        >
+        </el-tree>
+      </template>
+    </div>
+
+    <div
+      class="context-menu-mask"
+      v-if="contextMenuVisible"
+      @click="contextMenuVisible = false"
+      @contextmenu.prevent="contextMenuVisible = false"
+    ></div>
+  </div>
 </template>
 
 <script>
@@ -31,6 +49,23 @@ export default {
   },
 
   methods: {
+    async handleCreateProject() {
+      this.$prompt("Please input project name", "Create project", {
+        confirmButtonText: "OK",
+        cancelButtonText: "Cancel",
+        inputErrorMessage: "Invalid name",
+      }).then(({ value }) => {
+        var item = {
+          name: value,
+          path: "",
+          type: "project",
+          children: [],
+        };
+
+        this.treeData.push(item);
+      });
+    },
+
     getPath(node) {
       if (node.parent === null) {
         return "";
@@ -48,47 +83,94 @@ export default {
 
       this.contextMenuVisible = true;
 
-      if (item.isDir) {
-        this.$contextmenu({
-          zIndex: 200,
-          x: e.clientX,
-          y: e.clientY,
-          items: [
-            {
-              label: "New file",
-              onClick: () => this.handleCreateFile(e, item, node, tree),
-            },
-            {
-              label: "New directory",
-              onClick: () => this.handleCreateDirectory(e, item, node, tree),
-            },
-            {
-              label: "Rename",
-              onClick: () => this.handleRename(e, item, node, tree),
-            },
-            {
-              label: "Delete",
-              onClick: () => this.handleDelete(e, item, node, tree),
-            },
-          ],
-        });
-      } else {
-        this.$contextmenu({
-          zIndex: 200,
-          x: e.clientX,
-          y: e.clientY,
-          items: [
-            {
-              label: "Rename",
-              onClick: () => this.handleRename(e, item, node, tree),
-            },
-            {
-              label: "Delete",
-              onClick: () => this.handleDelete(e, item, node, tree),
-            },
-          ],
-        });
+      switch (item.type) {
+        case "project":
+          this.$contextmenu({
+            zIndex: 200,
+            x: e.clientX,
+            y: e.clientY,
+            items: [
+              {
+                label: "New file",
+                onClick: () => this.handleCreateFile(e, item, node, tree),
+              },
+              {
+                label: "New directory",
+                onClick: () => this.handleCreateDirectory(e, item, node, tree),
+              },
+              {
+                label: "Remove project",
+                onClick: () => this.handleRemoveProject(e, item, node, tree),
+              },
+            ],
+          });
+          break;
+        case "dir":
+          this.$contextmenu({
+            zIndex: 200,
+            x: e.clientX,
+            y: e.clientY,
+            items: [
+              {
+                label: "New file",
+                onClick: () => this.handleCreateFile(e, item, node, tree),
+              },
+              {
+                label: "New directory",
+                onClick: () => this.handleCreateDirectory(e, item, node, tree),
+              },
+              {
+                label: "Rename",
+                onClick: () => this.handleRename(e, item, node, tree),
+              },
+              {
+                label: "Delete",
+                onClick: () => this.handleDelete(e, item, node, tree),
+              },
+            ],
+          });
+          break;
+        case "file":
+          this.$contextmenu({
+            zIndex: 200,
+            x: e.clientX,
+            y: e.clientY,
+            items: [
+              {
+                label: "Rename",
+                onClick: () => this.handleRename(e, item, node, tree),
+              },
+              {
+                label: "Delete",
+                onClick: () => this.handleDelete(e, item, node, tree),
+              },
+            ],
+          });
+          break;
       }
+    },
+
+    async handleRemoveProject(e, item, node, tree) {
+      try {
+        await this.$confirm(
+          "Are you sure to remove ' " + item.name + " ' ?",
+          "Warning",
+          {
+            confirmButtonText: "Confirm",
+            cancelButtonText: "Cancel",
+            type: "warning",
+          }
+        );
+
+        const parent = node.parent;
+        const children = parent.data.children || parent.data;
+        const index = children.findIndex((d) => d.name === item.name);
+
+        children.splice(index, 1);
+      } catch (e) {
+      }
+
+      this.contextMenuVisible = false;
     },
 
     async handleDelete(e, item, node, tree) {
@@ -206,6 +288,24 @@ export default {
 </script>
 
 <style scoped>
+.container {
+  position: relative;
+}
+
+.title {
+  padding: 2px 10px;
+  border-bottom: 1px #eee solid;
+  font-size: 0.5rem;
+}
+
+.content {
+  padding: 2px 0;
+}
+
+.panel-empty-project {
+  padding: 20px;
+}
+
 .context-menu-mask {
   position: fixed;
   z-index: 100;
