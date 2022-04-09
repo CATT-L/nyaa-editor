@@ -26,62 +26,19 @@ export default {
         children: "children",
         label: "name",
       },
-      treeData: [
-        {
-          name: "public",
-          isDir: true,
-          children: [
-            {
-              name: "favicon.ico",
-              isDir: false,
-            },
-            {
-              name: "index.html",
-              isDir: false,
-            },
-          ],
-        },
-        {
-          name: "src",
-          isDir: true,
-          children: [
-            {
-              name: "assets",
-              isDir: true,
-              children: [
-                {
-                  name: "logo.png",
-                  isDir: false,
-                },
-              ],
-            },
-            {
-              name: "App.vue",
-              isDir: false,
-            },
-            {
-              name: "main.js",
-              isDir: false,
-            },
-          ],
-        },
-        {
-          name: "package.json",
-          isDir: false,
-        },
-        {
-          name: "README.md",
-          isDir: false,
-        },
-        {
-          name: "vue.config.js",
-          isDir: false,
-        },
-      ],
+      treeData: [],
     };
   },
 
   methods: {
+    getPath(node) {
+      if (node.parent === null) {
+        return "";
+      } else {
+        return this.getPath(node.parent) + "/" + node.data.name;
+      }
+    },
+
     handleNodeClick(item, node, tree) {
       console.log("node click: " + item.name);
     },
@@ -134,92 +91,115 @@ export default {
       }
     },
 
-    handleDelete(e, item, node, tree) {
-      this.$confirm(
-        "Are you sure to delete ' " + item.name + " ' ?",
-        "Warning",
-        {
-          confirmButtonText: "Confirm",
-          cancelButtonText: "Cancel",
-          type: "warning",
-        }
-      )
-        .then(() => {
-          const parent = node.parent;
-          const children = parent.data.children || parent.data;
-          const index = children.findIndex((d) => d.name === item.name);
+    async handleDelete(e, item, node, tree) {
+      try {
+        await this.$confirm(
+          "Are you sure to delete ' " + item.name + " ' ?",
+          "Warning",
+          {
+            confirmButtonText: "Confirm",
+            cancelButtonText: "Cancel",
+            type: "warning",
+          }
+        );
 
-          children.splice(index, 1);
-        })
-        .catch(() => {});
+        await this.$store.dispatch("app/directoryTree/io/remove", {
+          path: this.getPath(node),
+          name: item.name,
+        });
+
+        const parent = node.parent;
+        const children = parent.data.children || parent.data;
+        const index = children.findIndex((d) => d.name === item.name);
+
+        children.splice(index, 1);
+      } catch (e) {}
 
       this.contextMenuVisible = false;
     },
 
-    handleRename(e, item, node, tree) {
-      // todo verify the name is duplicated or not
+    async handleRename(e, item, node, tree) {
+      try {
+        var { value } = await this.$prompt(
+          `Please input ${item.isDir ? "directory" : "file"} name`,
+          "Rename",
+          {
+            inputValue: item.name,
+            confirmButtonText: "OK",
+            cancelButtonText: "Cancel",
+            inputErrorMessage: "Invalid name",
+          }
+        );
 
-      this.$prompt(
-        `Please input ${item.isDir ? "directory" : "file"} name`,
-        "Rename",
-        {
-          inputValue: item.name,
-          confirmButtonText: "OK",
-          cancelButtonText: "Cancel",
-          inputErrorMessage: "Invalid name",
-        }
-      )
-        .then(({ value }) => {
-          item.name = value;
-        })
-        .catch(() => {});
+        var { name } = await this.$store.dispatch(
+          "app/directoryTree/io/rename",
+          {
+            path: this.getPath(node),
+            name: item.name,
+            newName: value,
+          }
+        );
+
+        item.name = name;
+      } catch (e) {}
+
+      this.contextMenuVisible = false;
     },
 
-    handleCreateFile(e, item, node, tree) {
-      // todo verify name is duplicated or not
+    async handleCreateFile(e, item, node, tree) {
+      try {
+        var { value } = await this.$prompt(
+          "Please input file name",
+          "Create file",
+          {
+            confirmButtonText: "OK",
+            cancelButtonText: "Cancel",
+            inputErrorMessage: "Invalid file name",
+          }
+        );
 
-      // reload children sort
-
-      this.$prompt("Please input file name", "Create file", {
-        confirmButtonText: "OK",
-        cancelButtonText: "Cancel",
-        inputErrorMessage: "Invalid file name",
-      })
-        .then(({ value }) => {
-          var fileItem = {
+        var fileItem = await this.$store.dispatch(
+          "app/directoryTree/io/createFile",
+          {
+            path: this.getPath(node),
             name: value,
-            isDir: false,
-          };
+          }
+        );
 
-          node.expand();
+        item.children.push(fileItem);
 
-          item.children.push(fileItem);
-        })
-        .catch(() => {});
+        node.expand();
+      } catch (e) {}
+
+      this.contextMenuVisible = false;
     },
 
-    handleCreateDirectory(e, item, node, tree) {
-      // todo verify name is duplicated or not
+    async handleCreateDirectory(e, item, node, tree) {
+      try {
+        var { value } = await this.$prompt(
+          "Please input directory name",
+          "Create directory",
+          {
+            confirmButtonText: "OK",
+            cancelButtonText: "Cancel",
+            inputErrorMessage: "Invalid directory name",
+          }
+        );
 
-      // todo reload children sort
-
-      this.$prompt("Please input directory name", "Create directory", {
-        confirmButtonText: "OK",
-        cancelButtonText: "Cancel",
-        inputErrorMessage: "Invalid directory name",
-      })
-        .then(({ value }) => {
-          var fileItem = {
+        var fileItem = await this.$store.dispatch(
+          "app/directoryTree/io/createDirectory",
+          {
+            path: this.getPath(node),
             name: value,
-            isDir: true,
-            children: [],
-          };
+          }
+        );
 
-          node.expand();
+        item.children.push(fileItem);
 
-          item.children.push(fileItem);
-        })
-        .catch(() => {});
+        node.expand();
+      } catch (e) {}
+
+      this.contextMenuVisible = false;
     },
   },
 };

@@ -32,15 +32,46 @@ const store = {
   actions: {
     getNodeInfo({ dispatch, state }, { path, name }) {},
 
-    createFile({ dispatch, state }, { path, name }) {},
+    createFile({ dispatch, state }, { path, name }) {
+      this.$log(state, `apply to create file '${name}' at '${path}'`);
 
-    createDirectory({ dispatch, state }, { path, name }) {},
+      // todo verify name is duplicated or not
+      // reload children sort
 
-    rename({ dispatch, state }, { path, name, newName }) {},
+      return { name: name, isDir: false };
+    },
+
+    createDirectory({ dispatch, state }, { path, name }) {
+      this.$log(state, `apply to create directory '${name}' at '${path}'`);
+
+      // todo verify name is duplicated or not
+
+      // todo reload children sort
+
+      return {
+        name: name,
+        isDir: true,
+        children: [],
+      };
+    },
+
+    rename({ dispatch, state }, { path, name, newName }) {
+      this.$log(state, `rename ${name} to ${newName} at ${path}`);
+
+      // todo verify the name is duplicated or not
+
+      return {
+        name: newName,
+      };
+    },
 
     move({ dispatch, state }, { path, name, newPath }) {},
 
-    remove({ dispatch, state }, { path, name }) {},
+    remove({ dispatch, state }, { path, name }) {
+      this.$log(state, `remove ${name} at ${path}`);
+
+      return true;
+    },
 
     __autoload({ dispatch, state }, prefix = "") {
       state.__prefix = prefix + "/";
