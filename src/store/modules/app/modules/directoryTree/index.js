@@ -25,7 +25,7 @@ try {
 const store = {
   state: {
     __prefix: "",
-    __name: "app",
+    __name: "directory-tree",
   },
   getters: {},
   mutations: {},

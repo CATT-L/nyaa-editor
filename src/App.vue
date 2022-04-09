@@ -8,6 +8,9 @@ export default {
   components: {
     editor: require("@/components/editor").default,
   },
+  mounted() {
+    this.$store.dispatch("__autoload");
+  },
 };
 </script>
 

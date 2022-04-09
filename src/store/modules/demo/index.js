@@ -1,3 +1,5 @@
+import { assign } from "lodash";
+
 const modules = {};
 
 try {
@@ -20,7 +22,35 @@ try {
   });
 } catch (e) {}
 
-export default {
-  namespace: true,
-  modules,
+const store = {
+  state: {
+    __prefix: "",
+    __name: "demo",
+  },
+  getters: {},
+  mutations: {},
+  actions: {
+    __autoload({ dispatch, state }, prefix = "") {
+      state.__prefix = prefix + "/";
+
+      this.$log(state, "autoload");
+
+      Object.keys(modules).forEach((key) => {
+        if (
+          !!modules[key]["actions"] &&
+          !!modules[key]["actions"]["__autoload"]
+        ) {
+          dispatch(`${key}/__autoload`, state.__prefix + state.__name);
+        }
+      });
+    },
+  },
 };
+
+export default assign(
+  {
+    namespaced: true,
+    modules,
+  },
+  store
+);
