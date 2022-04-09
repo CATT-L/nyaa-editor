@@ -61,6 +61,24 @@ const store = {
   },
   mutations: {},
   actions: {
+    async delete({ dispatch, state }, { item }) {
+      this.$log(state, `remove item ${item.name}`, item);
+
+      const db = await dispatch("getDb");
+
+      if (item.isDir) {
+        item.children.forEach(async (r) => {
+          await dispatch("delete", { item: r });
+        });
+
+        db.remove({ id: item.id }).write();
+      } else {
+        db.remove({ id: item.id }).write();
+      }
+
+      dispatch("load");
+    },
+
     async create({ dispatch, state }, { parent, name, isDir }) {
       const db = await dispatch("getDb");
 

@@ -190,28 +190,19 @@ export default {
     },
 
     async handleDelete(e, item, node, tree) {
-      try {
-        await this.$confirm(
-          "Are you sure to delete ' " + item.name + " ' ?",
-          "Warning",
-          {
-            confirmButtonText: "Confirm",
-            cancelButtonText: "Cancel",
-            type: "warning",
-          }
-        );
-
-        await this.$store.dispatch("app/directoryTree/io/remove", {
-          path: this.getPath(node),
-          name: item.name,
+      this.$confirm(
+        "Are you sure to delete ' " + item.name + " ' ?",
+        "Warning",
+        {
+          confirmButtonText: "Confirm",
+          cancelButtonText: "Cancel",
+          type: "warning",
+        }
+      ).then(async () => {
+        await this.$store.dispatch("app/directoryTree/file/delete", {
+          item: item,
         });
-
-        const parent = node.parent;
-        const children = parent.data.children || parent.data;
-        const index = children.findIndex((d) => d.name === item.name);
-
-        children.splice(index, 1);
-      } catch (e) {}
+      });
 
       this.contextMenuVisible = false;
     },
