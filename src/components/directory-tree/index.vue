@@ -16,6 +16,7 @@
       <template v-else>
         <el-tree
           class="directory-tree no-select"
+          default-expand-all
           :data="treeData"
           :props="defaultProps"
           @node-click="handleNodeClick"
@@ -275,6 +276,7 @@ export default {
   margin: 2px 10px;
   border-bottom: 1px #eee solid;
   font-size: 0.5rem;
+  color: #909399;
 }
 
 .content {
