@@ -290,10 +290,11 @@ export default {
 <style scoped>
 .container {
   position: relative;
+  overflow-y: auto;
 }
 
 .title {
-  padding: 2px 10px;
+  margin: 2px 10px;
   border-bottom: 1px #eee solid;
   font-size: 0.5rem;
 }

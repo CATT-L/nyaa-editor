@@ -6,9 +6,7 @@
       </el-header>
       <el-container>
         <el-aside width="280px">
-          <div style="height: 100%">
-            <directory-tree></directory-tree>
-          </div>
+          <directory-tree></directory-tree>
         </el-aside>
         <el-container>
           <el-header class="my-tab" style="height: auto; padding: 0">
@@ -115,7 +113,6 @@ export default {
     },
   },
   mounted() {
-
     this.handleLoad();
 
     this.timerAutoSave = setInterval(() => {
