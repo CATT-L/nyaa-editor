@@ -36,6 +36,8 @@
 </template>
 
 <script>
+import { mapState, mapGetters } from "vuex";
+
 export default {
   data() {
     return {
@@ -44,9 +46,26 @@ export default {
         children: "children",
         label: "name",
       },
-      treeData: [],
+      // treeData: [],
     };
   },
+  computed: {
+    ...mapState({
+      projects: (state) => state.app.directoryTree.project.list,
+    }),
+
+    treeData() {
+      return this.projects.map((project) => ({
+        id: project.id,
+        type: "project",
+        path: "",
+        name: project.name,
+        children: [],
+      }));
+    },
+  },
+
+  mounted() {},
 
   methods: {
     async handleCreateProject() {
@@ -54,15 +73,10 @@ export default {
         confirmButtonText: "OK",
         cancelButtonText: "Cancel",
         inputErrorMessage: "Invalid name",
-      }).then(({ value }) => {
-        var item = {
+      }).then(async ({ value }) => {
+        await this.$store.dispatch("app/directoryTree/project/create", {
           name: value,
-          path: "",
-          type: "project",
-          children: [],
-        };
-
-        this.treeData.push(item);
+        });
       });
     },
 
@@ -162,13 +176,10 @@ export default {
           }
         );
 
-        const parent = node.parent;
-        const children = parent.data.children || parent.data;
-        const index = children.findIndex((d) => d.name === item.name);
-
-        children.splice(index, 1);
-      } catch (e) {
-      }
+        await this.$store.dispatch("app/directoryTree/project/delete", {
+          name: item.name,
+        });
+      } catch (e) {}
 
       this.contextMenuVisible = false;
     },
