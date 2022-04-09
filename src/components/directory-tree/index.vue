@@ -23,6 +23,9 @@
           @node-click="handleNodeClick"
           @node-contextmenu="handleNodeContextMenu"
         >
+          <template #default="{ node, data }">
+            <node-item :node="node" :data="data"></node-item>
+          </template>
         </el-tree>
       </template>
     </div>
@@ -40,6 +43,9 @@
 import { mapState, mapGetters } from "vuex";
 
 export default {
+  components: {
+    "node-item": require("./node-item").default,
+  },
   data() {
     return {
       contextMenuVisible: false,

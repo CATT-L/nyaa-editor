@@ -16,7 +16,7 @@ app.use(ElementPlus);
 app.use(ContextMenu);
 
 for (let iconName in ElementIcon) {
-  app.component(iconName, ElementIcon[iconName]);
+  app.component(`ElIcon${iconName}`, ElementIcon[iconName]);
 }
 
 app.mount("#app");
