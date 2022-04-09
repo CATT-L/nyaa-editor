@@ -16,7 +16,6 @@
       <template v-else>
         <el-tree
           class="directory-tree no-select"
-          draggable
           :data="treeData"
           :props="defaultProps"
           @node-click="handleNodeClick"
