@@ -17,6 +17,7 @@
         <el-tree
           class="directory-tree no-select"
           default-expand-all
+          :indent="0"
           :data="treeData"
           :props="defaultProps"
           @node-click="handleNodeClick"
@@ -295,5 +296,43 @@ export default {
   top: 0;
   left: 0;
   background: rgba(255, 0, 0, 0);
+}
+</style>
+
+<style>
+.directory-tree .el-tree-node {
+  position: relative;
+  padding-left: 8px;
+}
+
+.directory-tree .el-tree-node__children {
+  padding-left: 8px;
+}
+
+.directory-tree .el-tree-node:before {
+  content: "";
+  height: 100%;
+  width: 1px;
+  position: absolute;
+  border-width: 1px;
+  border-left: 1px solid #aaa;
+  left: 19px;
+  top: 20px;
+  height: calc(100% - 33px);
+}
+
+.directory-tree .el-tree-node:after {
+  content: "";
+  width: 11px;
+  height: 20px;
+  position: absolute;
+  left: 4px;
+  top: 12px;
+  border-width: 1px;
+  border-top: 1px solid #aaa;
+}
+
+.directory-tree > .el-tree-node::after {
+  border-top: none;
 }
 </style>
