@@ -44,4 +44,22 @@ body,
   -moz-osx-font-smoothing: grayscale;
   color: #2c3e50;
 }
+
+.el-message--success {
+  --el-message-bg-color: var(--el-color-success-dark-2);
+  --el-message-border-color: var(--el-color-success-dark-2);
+  --el-message-text-color: var(--el-color-success-light-9);
+}
+
+.el-message--error {
+  --el-message-bg-color: var(--el-color-error);
+  --el-message-border-color: var(--el-color-error-dark-2);
+  --el-message-text-color: var(--el-color-error-light-9);
+}
+
+.el-message--warning {
+  --el-message-bg-color: var(--el-color-warning);
+  --el-message-border-color: var(--el-color-warning-dark-2);
+  --el-message-text-color: var(--el-color-white);
+}
 </style>
