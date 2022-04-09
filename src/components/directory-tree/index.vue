@@ -55,13 +55,20 @@ export default {
     }),
 
     treeData() {
-      return this.projects.map((project) => ({
-        id: project.id,
-        type: "project",
-        path: "",
-        name: project.name,
-        children: [],
-      }));
+      return this.projects.map((project) => {
+        var item = {
+          id: project.id,
+          type: "project",
+          path: "",
+          name: project.name,
+          children: [],
+        };
+
+        item.children =
+          this.$store.getters["app/directoryTree/file/children"](item);
+
+        return item;
+      });
     },
   },
 
@@ -97,29 +104,28 @@ export default {
 
       this.contextMenuVisible = true;
 
-      switch (item.type) {
-        case "project":
-          this.$contextmenu({
-            zIndex: 200,
-            x: e.clientX,
-            y: e.clientY,
-            items: [
-              {
-                label: "New file",
-                onClick: () => this.handleCreateFile(e, item, node, tree),
-              },
-              {
-                label: "New directory",
-                onClick: () => this.handleCreateDirectory(e, item, node, tree),
-              },
-              {
-                label: "Remove project",
-                onClick: () => this.handleRemoveProject(e, item, node, tree),
-              },
-            ],
-          });
-          break;
-        case "dir":
+      if (item.type === "project") {
+        this.$contextmenu({
+          zIndex: 200,
+          x: e.clientX,
+          y: e.clientY,
+          items: [
+            {
+              label: "New file",
+              onClick: () => this.handleCreateFile(e, item, node, tree),
+            },
+            {
+              label: "New directory",
+              onClick: () => this.handleCreateDirectory(e, item, node, tree),
+            },
+            {
+              label: "Remove project",
+              onClick: () => this.handleRemoveProject(e, item, node, tree),
+            },
+          ],
+        });
+      } else {
+        if (item.isDir) {
           this.$contextmenu({
             zIndex: 200,
             x: e.clientX,
@@ -143,8 +149,7 @@ export default {
               },
             ],
           });
-          break;
-        case "file":
+        } else {
           this.$contextmenu({
             zIndex: 200,
             x: e.clientX,
@@ -160,7 +165,7 @@ export default {
               },
             ],
           });
-          break;
+        }
       }
     },
 
@@ -240,57 +245,37 @@ export default {
     },
 
     async handleCreateFile(e, item, node, tree) {
-      try {
-        var { value } = await this.$prompt(
-          "Please input file name",
-          "Create file",
-          {
-            confirmButtonText: "OK",
-            cancelButtonText: "Cancel",
-            inputErrorMessage: "Invalid file name",
-          }
-        );
-
-        var fileItem = await this.$store.dispatch(
-          "app/directoryTree/io/createFile",
-          {
-            path: this.getPath(node),
-            name: value,
-          }
-        );
-
-        item.children.push(fileItem);
-
+      this.$prompt("Please input file name", "Create file", {
+        confirmButtonText: "OK",
+        cancelButtonText: "Cancel",
+        inputErrorMessage: "Invalid file name",
+      }).then(async ({ value }) => {
         node.expand();
-      } catch (e) {}
+
+        await this.$store.dispatch("app/directoryTree/file/create", {
+          parent: item,
+          name: value,
+          isDir: false,
+        });
+      });
 
       this.contextMenuVisible = false;
     },
 
     async handleCreateDirectory(e, item, node, tree) {
-      try {
-        var { value } = await this.$prompt(
-          "Please input directory name",
-          "Create directory",
-          {
-            confirmButtonText: "OK",
-            cancelButtonText: "Cancel",
-            inputErrorMessage: "Invalid directory name",
-          }
-        );
-
-        var fileItem = await this.$store.dispatch(
-          "app/directoryTree/io/createDirectory",
-          {
-            path: this.getPath(node),
-            name: value,
-          }
-        );
-
-        item.children.push(fileItem);
-
+      this.$prompt("Please input directory name", "Create directory", {
+        confirmButtonText: "OK",
+        cancelButtonText: "Cancel",
+        inputErrorMessage: "Invalid directory name",
+      }).then(async ({ value }) => {
         node.expand();
-      } catch (e) {}
+
+        await this.$store.dispatch("app/directoryTree/file/create", {
+          parent: item,
+          name: value,
+          isDir: true,
+        });
+      });
 
       this.contextMenuVisible = false;
     },

@@ -79,7 +79,7 @@ const store = {
 
       state.list = [];
       state.list = db.value();
-      state.count = db.value().length;
+      state.count = db.size().value();
     },
 
     __autoload({ dispatch, state }, prefix = "") {

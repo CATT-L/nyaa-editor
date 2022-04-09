@@ -8,7 +8,7 @@
         <el-aside width="280px">
           <directory-tree></directory-tree>
         </el-aside>
-        <el-container>
+        <el-container v-if="false">
           <el-header class="my-tab" style="height: auto; padding: 0">
             <el-tabs
               v-model="editableTabsValue"
