@@ -6,10 +6,14 @@
       </el-header>
       <el-container>
         <el-aside width="280px">
-          <directory-tree></directory-tree>
+          <directory-tree @item-click="handleItemClick"></directory-tree>
         </el-aside>
         <el-container>
-          <el-header class="my-tab" style="height: auto; padding: 0" v-if="false">
+          <el-header
+            class="my-tab"
+            style="height: auto; padding: 0"
+            v-if="false"
+          >
             <el-tabs
               v-model="editableTabsValue"
               type="card"
@@ -126,6 +130,9 @@ export default {
     this.handleSave();
   },
   methods: {
+    handleItemClick({ item }) {
+      console.log(item);
+    },
     handleLoad() {
       try {
         var source = JSON.parse(localStorage.source);

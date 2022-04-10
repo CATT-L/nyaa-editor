@@ -103,7 +103,7 @@ export default {
     },
 
     handleNodeClick(item, node, tree) {
-      console.log("node click: " + item.name);
+      this.$emit("item-click", { item, node, tree });
     },
 
     handleNodeContextMenu(e, item, node, tree) {
@@ -376,5 +376,4 @@ export default {
 .directory-tree .is-current > .el-tree-node__content {
   background: var(--el-color-primary-light-7);
 }
-
 </style>
