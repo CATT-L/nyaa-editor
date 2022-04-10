@@ -42,10 +42,10 @@ export default {
 
 <style scoped>
 .panel-result {
+  /* background: #6cf; */
   position: absolute;
   height: 100%;
   width: 100%;
-  /* background: #6cf; */
   overflow-y: auto;
 }
 

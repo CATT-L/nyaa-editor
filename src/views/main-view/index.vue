@@ -20,7 +20,24 @@
         <directory-tree @item-click="handleItemClick"></directory-tree>
       </el-aside>
       <el-main class="main-content">
-        <editor></editor>
+        <template v-if="currentFile">
+          <div class="panel-bar no-select" flex>
+            <div style="margin-right: 10px">
+              {{ currentFile.name }}
+            </div>
+            <div flex-box="1" class="panel-tool-box">
+              <el-button @click="handleSave">Save</el-button>
+            </div>
+            <div class="panel-tool-box">
+              <el-button @click="handleClose" type="danger" plain
+                >Close</el-button
+              >
+            </div>
+          </div>
+          <div class="panel-editor">
+            <editor ref="editor"></editor>
+          </div>
+        </template>
       </el-main>
     </el-container>
   </el-container>
@@ -33,6 +50,12 @@ export default {
     editor: require("@/components/editor").default,
   },
 
+  data() {
+    return {
+      currentFile: null,
+    };
+  },
+
   computed: {
     version() {
       return process.env.VUE_APP_VERSION;
@@ -43,7 +66,28 @@ export default {
 
   methods: {
     handleItemClick({ item }) {
-      console.log(item);
+      if (item.type !== "file") {
+        return false;
+      }
+
+      this.currentFile = item;
+
+      this.$nextTick(() => {
+        this.$refs["editor"].openFile(item);
+      });
+    },
+
+    handleClose() {
+      this.$nextTick(() => {
+        this.$refs["editor"].reset();
+        this.currentFile = null;
+      });
+    },
+
+    handleSave() {
+      this.$nextTick(() => {
+        this.$refs["editor"].save();
+      });
     },
   },
 };
@@ -72,5 +116,22 @@ export default {
 
 .main-content {
   padding: 0;
+}
+
+.main-content > .panel-bar {
+  height: 30px;
+  line-height: 30px;
+  padding: 0 10px;
+  color: var(--el-color-info);
+}
+
+.main-content > .panel-editor {
+  height: calc(100% - 30px);
+}
+
+.main-content .panel-tool-box .el-button {
+  padding: 4px 8px;
+  height: 24px;
+  font-size: var(--el-font-size-extra-small);
 }
 </style>

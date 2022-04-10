@@ -1,10 +1,10 @@
 <template>
   <div class="editor full-height" flex>
     <div style="width: 50%" flex>
-      <panel-edit v-model:value="source"></panel-edit>
+      <panel-edit v-model:value="content"></panel-edit>
     </div>
     <div style="width: 50%; position: relative" flex>
-      <panel-result :markdown="source"></panel-result>
+      <panel-result :markdown="content"></panel-result>
     </div>
   </div>
 </template>
@@ -17,39 +17,52 @@ export default {
   },
   data() {
     return {
-      source: "",
+      file: null,
+      content: "",
       timerAutoSave: null,
     };
   },
   computed: {},
   mounted() {
-    this.handleLoad();
-
-    this.timerAutoSave = setInterval(() => {
-      this.handleSave();
-    }, 5e3);
+    // this.handleLoad();
+    // this.timerAutoSave = setInterval(() => {
+    //   this.handleSave();
+    // }, 5e3);
   },
 
   unmounted() {
-    clearInterval(this.timerAutoSave);
-    this.timerAutoSave = null;
-    this.handleSave();
+    // clearInterval(this.timerAutoSave);
+    // this.timerAutoSave = null;
+    // this.handleSave();
   },
   methods: {
-    handleItemClick({ item }) {
-      console.log(item);
-    },
-    handleLoad() {
-      try {
-        var source = JSON.parse(localStorage.source);
-      } catch (e) {
-        var source = "";
-      }
-      this.source = source;
+    async openFile(file) {
+      this.file = file;
+
+      this.content = await this.$store.dispatch("app/content/fetchContent", {
+        item: this.file,
+        content: this.content,
+      });
     },
 
-    handleSave() {
-      localStorage.source = JSON.stringify(this.source);
+    async save() {
+      if (!this.file) {
+        return false;
+      }
+
+      await this.$store.dispatch("app/content/save", {
+        item: this.file,
+        content: this.content,
+      });
+
+      this.$message({
+        type: "success",
+        message: `The file '${this.file.name}' has been saved sucessfully.`,
+      });
+    },
+    reset() {
+      this.file = null;
+      this.content = "";
     },
   },
 };
