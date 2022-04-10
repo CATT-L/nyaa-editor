@@ -371,4 +371,10 @@ export default {
 .directory-tree > .el-tree-node::after {
   border-top: none;
 }
+
+.directory-tree .el-tree-node__content:hover,
+.directory-tree .is-current > .el-tree-node__content {
+  background: var(--el-color-primary-light-7);
+}
+
 </style>
