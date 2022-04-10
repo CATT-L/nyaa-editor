@@ -3,7 +3,7 @@
     <el-header class="main-header no-select">
       <div flex>
         <div flex-box="1">
-          <div class="header-title">Markdown Editor</div>
+          <div class="header-title">Nyaa Editor</div>
           <el-tag type="info" size="small">ver {{ version }}</el-tag>
         </div>
         <div flex-box="0">
@@ -26,17 +26,20 @@
               {{ currentFile.name }}
             </div>
             <div flex-box="1" class="panel-tool-box">
-              <el-button @click="handleSave">Save</el-button>
+              <!-- <el-button @click="handleSave">Save</el-button> -->
             </div>
             <div class="panel-tool-box">
-              <el-button @click="handleClose" type="danger" plain
-                >Close</el-button
-              >
+              <el-link @click="handleClose" plain :underline="false">
+                <el-icon><el-icon-close-bold /></el-icon>
+              </el-link>
             </div>
           </div>
           <div class="panel-editor">
             <editor ref="editor"></editor>
           </div>
+        </template>
+        <template v-else>
+          <div style="padding: 10px">👈 Please open a file from explorer</div>
         </template>
       </el-main>
     </el-container>
@@ -72,13 +75,15 @@ export default {
 
       this.currentFile = item;
 
-      this.$nextTick(() => {
+      this.$nextTick(async () => {
+        await this.$refs["editor"].save();
         this.$refs["editor"].openFile(item);
       });
     },
 
     handleClose() {
-      this.$nextTick(() => {
+      this.$nextTick(async () => {
+        await this.$refs["editor"].save();
         this.$refs["editor"].reset();
         this.currentFile = null;
       });

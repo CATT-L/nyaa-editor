@@ -55,10 +55,10 @@ export default {
         content: this.content,
       });
 
-      this.$message({
-        type: "success",
-        message: `The file '${this.file.name}' has been saved sucessfully.`,
-      });
+      // this.$message({
+      //   type: "success",
+      //   message: `The file '${this.file.name}' has been saved sucessfully.`,
+      // });
     },
     reset() {
       this.file = null;
