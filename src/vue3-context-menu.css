@@ -1,0 +1,30 @@
+/* rewrite */
+
+.mx-context-menu {
+  border-radius: 4px;
+  box-shadow: 2px 2px 5px 0px rgba(0, 0, 0, 0.1);
+  padding: 5px 0;
+  border: 1px solid #eee;
+}
+
+.mx-context-menu-item {
+  cursor: pointer;
+  padding: 4px 10px;
+}
+
+.mx-context-menu-item .text .icon {
+  width: 15px;
+}
+
+.mx-context-menu-item .text .mx-right-arrow {
+  right: auto;
+  opacity: 0.7;
+}
+
+.mx-context-menu-item.disabled {
+  cursor: default;
+}
+
+.mx-context-menu-item.disabled .mx-right-arrow {
+  opacity: 0.3;
+}
