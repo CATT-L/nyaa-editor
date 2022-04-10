@@ -310,8 +310,8 @@ export default {
 }
 
 .title {
-  margin: 2px 10px;
-  border-bottom: 1px #eee solid;
+  padding: 8px;
+  border-bottom: 1px dashed var(--el-fill-color-light);
   font-size: 0.5rem;
   color: #909399;
 }
@@ -375,5 +375,9 @@ export default {
 .directory-tree .el-tree-node__content:hover,
 .directory-tree .is-current > .el-tree-node__content {
   background: var(--el-color-primary-light-7);
+}
+
+.directory-tree.el-tree {
+  background: none;
 }
 </style>

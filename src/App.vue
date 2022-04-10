@@ -1,12 +1,11 @@
 <template>
-  <editor></editor>
+  <main-view></main-view>
 </template>
-
 <script>
 export default {
   name: "App",
   components: {
-    editor: require("@/components/editor").default,
+    "main-view": require("@/views/main-view").default,
   },
   mounted() {
     console.log(process.env);
@@ -27,6 +26,7 @@ body,
 
 .full-height {
   height: 100%;
+  position: relative;
 }
 
 .no-select {
@@ -62,4 +62,9 @@ body,
   --el-message-border-color: var(--el-color-warning-dark-2);
   --el-message-text-color: var(--el-color-white);
 }
+
+.el-main {
+  overflow: visible;
+}
+
 </style>
