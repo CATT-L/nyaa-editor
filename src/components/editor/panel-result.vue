@@ -8,6 +8,7 @@
 import MarkdownIt from "markdown-it";
 import "@/assets/themes/github.css";
 import css from "./export.css.js";
+import { saveAs } from "file-saver";
 
 export default {
   props: {
@@ -55,7 +56,10 @@ export default {
  </div>
  </body>
  </html>`;
-      console.log(html);
+
+      var blob = new Blob([html]);
+
+      saveAs(blob, "export.html");
     },
   },
 };
