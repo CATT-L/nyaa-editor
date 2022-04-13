@@ -27,6 +27,7 @@
             </div>
             <div flex-box="1" class="panel-tool-box">
               <!-- <el-button @click="handleSave">Save</el-button> -->
+              <el-button @click="handleExportHtml">导出HTML</el-button>
             </div>
             <div class="panel-tool-box">
               <el-link @click="handleClose" plain :underline="false">
@@ -68,6 +69,11 @@ export default {
   mounted() {},
 
   methods: {
+    handleExportHtml() {
+      this.$nextTick(async () => {
+        this.$refs["editor"].export();
+      });
+    },
     handleItemClick({ item }) {
       if (item.type !== "file") {
         return false;

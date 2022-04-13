@@ -4,7 +4,7 @@
       <panel-edit v-model:value="content"></panel-edit>
     </div>
     <div style="width: 50%; position: relative" flex>
-      <panel-result :markdown="content"></panel-result>
+      <panel-result ref="panel-result" :markdown="content"></panel-result>
     </div>
   </div>
 </template>
@@ -36,6 +36,11 @@ export default {
     // this.handleSave();
   },
   methods: {
+    async export() {
+      this.$nextTick(() => {
+        this.$refs["panel-result"].export();
+      });
+    },
     async openFile(file) {
       this.file = file;
 

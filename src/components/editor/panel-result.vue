@@ -7,6 +7,7 @@
 <script>
 import MarkdownIt from "markdown-it";
 import "@/assets/themes/github.css";
+import css from "./export.css.js";
 
 export default {
   props: {
@@ -35,6 +36,26 @@ export default {
   methods: {
     handleRefresh() {
       this.html = this.mdit.render(this.markdown);
+    },
+
+    async export() {
+      var html = `<!DOCTYPE html>
+ <html>
+ <head>
+ <meta charset="utf-8">
+ <meta name="viewport" content="width=device-width,initial-scale=1.0">
+ <title>Export</title>
+ <style>
+ ${css}
+ </style>
+ </head>
+ <body>
+ <div class="resume_preview_page" style="margin:0 auto;width:1200px">
+ ${this.html}
+ </div>
+ </body>
+ </html>`;
+      console.log(html);
     },
   },
 };
