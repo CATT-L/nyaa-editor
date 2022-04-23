@@ -7,7 +7,10 @@
     "dev": "babel-node src/main.js",
     "build": "webpack --mode=production --config webpack.config.js"
   },
-  "dependencies": {},
+  "dependencies": {
+    "koa": "^2.13.4",
+    "socket.io": "^4.4.1"
+  },
   "devDependencies": {
     "babel-cli": "^6.26.0",
     "babel-core": "^6.26.0",
