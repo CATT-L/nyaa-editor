@@ -4,7 +4,9 @@
   "private": true,
   "scripts": {
     "web:dev": "cd src/web && npm run dev",
-    "web:build": "cd src/web && npm run build"
+    "web:build": "cd src/web && npm run build",
+    "server:dev": "cd src/server && npm run dev",
+    "server:build": "cd src/server && npm run build"
   },
   "dependencies": {
     "core-js": "^3.8.3",
