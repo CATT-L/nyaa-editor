@@ -2,7 +2,10 @@
   "name": "nyaa-editor",
   "version": "0.1.0",
   "private": true,
+  "main": "src/desktop/main.js",
   "scripts": {
+    "dev": "set NODE_ENV=development && electron .",
+    "build": "npm run server:build && npm run web:build",
     "web:dev": "cd src/web && npm run dev",
     "web:build": "cd src/web && npm run build",
     "server:dev": "cd src/server && npm run dev",
@@ -10,8 +13,7 @@
   },
   "dependencies": {
     "core-js": "^3.8.3",
-    "dayjs": "^1.11.0",
-    "vue": "^3.2.13"
+    "dayjs": "^1.11.0"
   },
   "devDependencies": {
     "electron": "^18.0.4",
