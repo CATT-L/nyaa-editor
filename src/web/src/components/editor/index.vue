@@ -42,23 +42,35 @@ export default {
       });
     },
     async openFile(file) {
+      
       this.file = file;
 
-      this.content = await this.$store.dispatch("app/content/fetchContent", {
-        item: this.file,
-        content: this.content,
-      });
+      var data = await this.$store.dispatch("app/explorer/readFile", { file });
+
+      this.content = data.content;
+
+      // this.content = await this.$store.dispatch("app/content/fetchContent", {
+      //   item: this.file,
+      //   content: this.content,
+      // });
     },
 
     async save() {
+
       if (!this.file) {
         return false;
       }
 
-      await this.$store.dispatch("app/content/save", {
-        item: this.file,
-        content: this.content,
-      });
+      await this.$store.dispatch('app/explorer/saveFile', {file: this.file, content: this.content});
+
+      // if (!this.file) {
+      //   return false;
+      // }
+
+      // await this.$store.dispatch("app/content/save", {
+      //   item: this.file,
+      //   content: this.content,
+      // });
 
       // this.$message({
       //   type: "success",
