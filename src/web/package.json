@@ -1,6 +1,6 @@
 {
   "name": "nyaa-editor-web",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "private": true,
   "author": "CATT-L",
   "description": "A markdown editor.",
