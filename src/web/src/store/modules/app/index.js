@@ -25,17 +25,18 @@ try {
 const store = {
   state: {
     __prefix: "",
-    __name: "directory-tree",
+    __name: "app",
   },
   getters: {},
   mutations: {},
   actions: {
     __autoload({ dispatch, state }, prefix = "") {
       state.__prefix = prefix + "/";
-
+      
       this.$log(state, "autoload");
 
       Object.keys(modules).forEach((key) => {
+
         if (
           !!modules[key]["actions"] &&
           !!modules[key]["actions"]["__autoload"]

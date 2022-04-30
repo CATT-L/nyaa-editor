@@ -1,5 +1,7 @@
 <template>
   <el-container class="full-height">
+    
+
     <el-header class="main-header no-select">
       <div flex>
         <div flex-box="1">
@@ -15,18 +17,24 @@
         </div>
       </div>
     </el-header>
+    <div style="padding: 5px 10px;">
+      <el-button @click="handleOpenFile">打开文件</el-button>
+      <el-button @click="handleSaveFile">保存文件</el-button>
+      <el-button @click="handleExportHtml">导出HTML</el-button>
+    </div>
     <el-container>
-      <el-aside class="main-aside">
+      <!-- <el-aside class="main-aside">
         <directory-tree @item-click="handleItemClick"></directory-tree>
-      </el-aside>
+      </el-aside> -->
       <el-main class="main-content">
         <template v-if="currentFile">
-          <div class="panel-bar no-select" flex>
+          <div class="panel-bar no-select" flex v-if="false">
             <div style="margin-right: 10px">
               {{ currentFile.name }}
             </div>
             <div flex-box="1" class="panel-tool-box">
               <!-- <el-button @click="handleSave">Save</el-button> -->
+              <el-button @click="handleExportHtml">导出HTML</el-button>
             </div>
             <div class="panel-tool-box">
               <el-link @click="handleClose" plain :underline="false">
@@ -56,6 +64,7 @@ export default {
   data() {
     return {
       currentFile: null,
+      fileList: [],
     };
   },
 
@@ -65,9 +74,44 @@ export default {
     },
   },
 
-  mounted() {},
+  mounted() {
+    this.currentFile = {};
+  },
 
   methods: {
+    async handleOpenFile(e) {
+      var file = await this.$store.dispatch("app/explorer/selectFile", {});
+
+      if (!file) {
+        return false;
+      }
+
+      this.$nextTick(() => {
+        const editor = this.$refs["editor"];
+
+        if (!editor) {
+          return false;
+        }
+
+        editor.openFile(file);
+      });
+    },
+    handleSaveFile() {
+      this.$nextTick(() => {
+        const editor = this.$refs["editor"];
+
+        if (!editor) {
+          return false;
+        }
+
+        editor.save();
+      });
+    },
+    handleExportHtml() {
+      this.$nextTick(async () => {
+        this.$refs["editor"].export();
+      });
+    },
     handleItemClick({ item }) {
       if (item.type !== "file") {
         return false;
@@ -93,6 +137,19 @@ export default {
       this.$nextTick(() => {
         this.$refs["editor"].save();
       });
+    },
+
+    handleGetFullPath(file) {
+      console.log(file);
+
+      var url = window.URL.createObjectURL(file.raw);
+
+      console.log(url);
+
+      // const { dialog } = require("electron");
+      // console.log(
+      //   dialog.showOpenDialog({ properties: ["openFile", "multiSelections"] })
+      // );
     },
   },
 };

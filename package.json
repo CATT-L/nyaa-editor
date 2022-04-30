@@ -1,50 +1,23 @@
 {
   "name": "nyaa-editor",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "private": true,
+  "main": "src/desktop/main.js",
   "scripts": {
-    "dev": "vue-cli-service serve",
-    "dev:catt": "vue-cli-service serve --port=24061",
-    "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint"
+    "dev": "chcp 65001 && set NODE_ENV=development && electron .",
+    "build": "npm run server:build && npm run web:build",
+    "web:dev": "cd src/web && npm run dev",
+    "web:build": "cd src/web && npm run build",
+    "server:dev": "cd src/server && npm run dev",
+    "server:build": "cd src/server && npm run build"
   },
   "dependencies": {
-    "@element-plus/icons-vue": "^1.1.4",
-    "@imengyu/vue3-context-menu": "^1.0.9",
     "core-js": "^3.8.3",
-    "dayjs": "^1.11.0",
-    "element-plus": "^2.1.8",
-    "flex.css": "^1.1.7",
-    "js-cookie": "^3.0.1",
-    "lowdb": "^1.0.0",
-    "markdown-it": "^12.3.2",
-    "snowflake-id": "^1.1.0",
-    "vue": "^3.2.13",
-    "vuex": "^4.0.2"
+    "dayjs": "^1.11.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.12.16",
-    "@babel/eslint-parser": "^7.12.16",
-    "@vue/cli-plugin-babel": "~5.0.0",
-    "@vue/cli-plugin-eslint": "~5.0.0",
-    "@vue/cli-service": "~5.0.0",
-    "eslint": "^7.32.0",
-    "eslint-plugin-vue": "^8.0.3"
-  },
-  "eslintConfig": {
-    "root": true,
-    "env": {
-      "node": true
-    },
-    "extends": [
-      "plugin:vue/vue3-essential",
-      "eslint:recommended"
-    ],
-    "parserOptions": {
-      "parser": "@babel/eslint-parser"
-    },
-    "rules": {}
+    "electron": "^18.0.4",
+    "electron-devtools-installer": "^3.2.0"
   },
   "browserslist": [
     "> 1%",

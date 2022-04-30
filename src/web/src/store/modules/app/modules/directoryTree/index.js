@@ -25,25 +25,25 @@ try {
 const store = {
   state: {
     __prefix: "",
-    __name: "app",
+    __name: "directory-tree",
   },
   getters: {},
   mutations: {},
   actions: {
-    __autoload({ dispatch, state }, prefix = "") {
-      state.__prefix = prefix + "/";
+    // __autoload({ dispatch, state }, prefix = "") {
+    //   state.__prefix = prefix + "/";
 
-      this.$log(state, "autoload");
+    //   this.$log(state, "autoload");
 
-      Object.keys(modules).forEach((key) => {
-        if (
-          !!modules[key]["actions"] &&
-          !!modules[key]["actions"]["__autoload"]
-        ) {
-          dispatch(`${key}/__autoload`, state.__prefix + state.__name);
-        }
-      });
-    },
+    //   Object.keys(modules).forEach((key) => {
+    //     if (
+    //       !!modules[key]["actions"] &&
+    //       !!modules[key]["actions"]["__autoload"]
+    //     ) {
+    //       dispatch(`${key}/__autoload`, state.__prefix + state.__name);
+    //     }
+    //   });
+    // },
   },
 };
 
