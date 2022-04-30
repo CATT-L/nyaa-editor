@@ -1,5 +1,6 @@
 const { app, BrowserWindow, Tray, Menu } = require("electron");
 const path = require("path");
+const IsDev = process.env.NODE_ENV.trim() == "development";
 
 app.whenReady().then(async () => {
   // 后端服务
@@ -21,11 +22,16 @@ app.whenReady().then(async () => {
 
   // 客户端
   const client = new BrowserWindow({
-    width: 800,
-    height: 600,
+    width: IsDev ? 1920 : 1280,
+    height: IsDev ? 1080 : 720,
+    webPreferences: { nodeIntegration: true, contextIsolation: false },
   });
 
   client.loadURL(frontendUrl);
+
+  if (IsDev) {
+    client.webContents.openDevTools();
+  }
 
   client.on("close", function (e) {
     app.quit(-1);

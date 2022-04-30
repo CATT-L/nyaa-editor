@@ -4,7 +4,7 @@
   "private": true,
   "main": "src/desktop/main.js",
   "scripts": {
-    "dev": "set NODE_ENV=development && electron .",
+    "dev": "chcp 65001 && set NODE_ENV=development && electron .",
     "build": "npm run server:build && npm run web:build",
     "web:dev": "cd src/web && npm run dev",
     "web:build": "cd src/web && npm run build",

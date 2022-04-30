@@ -20,6 +20,21 @@
         <directory-tree @item-click="handleItemClick"></directory-tree>
       </el-aside>
       <el-main class="main-content">
+        <el-upload
+          class="upload-demo"
+          action="#"
+          :auto-upload="false"
+          multiple
+          :limit="3"
+          :file-list="fileList"
+          :on-change="handleGetFullPath"
+        >
+          <el-button type="primary">Get full path (test)</el-button>
+          <div slot="tip" class="el-upload__tip">
+            只能上传jpg/png文件，且不超过500kb
+          </div>
+        </el-upload>
+
         <template v-if="currentFile">
           <div class="panel-bar no-select" flex>
             <div style="margin-right: 10px">
@@ -48,6 +63,7 @@
 </template>
 
 <script>
+
 export default {
   components: {
     "directory-tree": require("@/components/directory-tree").default,
@@ -57,6 +73,7 @@ export default {
   data() {
     return {
       currentFile: null,
+      fileList: [],
     };
   },
 
@@ -66,7 +83,9 @@ export default {
     },
   },
 
-  mounted() {},
+  mounted() {
+
+  },
 
   methods: {
     handleExportHtml() {
@@ -99,6 +118,19 @@ export default {
       this.$nextTick(() => {
         this.$refs["editor"].save();
       });
+    },
+
+    handleGetFullPath(file) {
+      console.log(file);
+
+      var url = window.URL.createObjectURL(file.raw);
+
+      console.log(url);
+
+      // const { dialog } = require("electron");
+      // console.log(
+      //   dialog.showOpenDialog({ properties: ["openFile", "multiSelections"] })
+      // );
     },
   },
 };
