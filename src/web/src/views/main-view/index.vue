@@ -20,6 +20,7 @@
     <div style="padding: 5px 10px;">
       <el-button @click="handleOpenFile">打开文件</el-button>
       <el-button @click="handleSaveFile">保存文件</el-button>
+      <el-button @click="handleExportHtml">导出HTML</el-button>
     </div>
     <el-container>
       <!-- <el-aside class="main-aside">
