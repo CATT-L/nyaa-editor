@@ -15,7 +15,7 @@ export default {
       var mode = this.MODE_WEB_FORM;
 
       if (typeof window.showOpenFilePicker == "function") {
-        // mode = this.MODE_WEB_IO;
+        mode = this.MODE_WEB_IO;
       }
 
       this.CACHE_MODE = mode;
