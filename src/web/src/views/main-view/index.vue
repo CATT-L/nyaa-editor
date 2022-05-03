@@ -78,21 +78,9 @@ export default {
 
   methods: {
     async handleOpenFile(e) {
-      //     var directory = await window.showDirectoryPicker();
-
-      //     window.directory = directory;
-      //     console.log(directory);
-      //     console.log();
-
-      //     console.log(directory.values());
-
-      //     return;
-
       var file = await this.$store.dispatch("app/explorer/selectFile", {});
 
-      return;
-
-      if (!file) {
+      if (!file.data) {
         return false;
       }
 

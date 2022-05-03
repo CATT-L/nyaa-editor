@@ -42,26 +42,22 @@ export default {
       });
     },
     async openFile(file) {
-      
       this.file = file;
 
-      var data = await this.$store.dispatch("app/explorer/readFile", { file });
+      var re = await this.$store.dispatch("app/explorer/readFile", { file });
 
-      this.content = data.content;
-
-      // this.content = await this.$store.dispatch("app/content/fetchContent", {
-      //   item: this.file,
-      //   content: this.content,
-      // });
+      this.content = re.data.content;
     },
 
     async save() {
-
       if (!this.file) {
         return false;
       }
 
-      await this.$store.dispatch('app/explorer/saveFile', {file: this.file, content: this.content});
+      await this.$store.dispatch("app/explorer/saveFile", {
+        file: this.file,
+        content: this.content,
+      });
 
       // if (!this.file) {
       //   return false;

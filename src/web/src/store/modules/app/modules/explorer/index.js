@@ -34,16 +34,22 @@ const store = {
   actions: {
     /** 选取文件 */
     async selectFile({ dispatch, state }, params) {
-
       var data = await ExplorerAdapter.selectFile(params);
 
-      this.$log(state, '选择文件', data);
+      this.$log(state, "选择文件", { data });
 
       return data;
     },
 
     /** 读取文件 */
     async readFile({ dispatch, state }, { file, opt = {} }) {
+      
+      this.$log(state, "读取文件", { file, opt });
+
+      var data = await ExplorerAdapter.readFile({ file, opt });
+
+      return data;
+
       return await new Promise((resolve, reject) => {
         var reader = new FileReader();
 
@@ -59,6 +65,7 @@ const store = {
       });
     },
 
+    /** 保存文件 */
     async saveFile({ dispatch, state }, { file, content }) {
       var blob = new Blob([content]);
 
