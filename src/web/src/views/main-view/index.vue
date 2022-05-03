@@ -1,7 +1,5 @@
 <template>
   <el-container class="full-height">
-    
-
     <el-header class="main-header no-select">
       <div flex>
         <div flex-box="1">
@@ -17,7 +15,7 @@
         </div>
       </div>
     </el-header>
-    <div style="padding: 5px 10px;">
+    <div style="padding: 5px 10px">
       <el-button @click="handleOpenFile">打开文件</el-button>
       <el-button @click="handleSaveFile">保存文件</el-button>
       <el-button @click="handleExportHtml">导出HTML</el-button>
@@ -80,7 +78,19 @@ export default {
 
   methods: {
     async handleOpenFile(e) {
+      //     var directory = await window.showDirectoryPicker();
+
+      //     window.directory = directory;
+      //     console.log(directory);
+      //     console.log();
+
+      //     console.log(directory.values());
+
+      //     return;
+
       var file = await this.$store.dispatch("app/explorer/selectFile", {});
+
+      return;
 
       if (!file) {
         return false;

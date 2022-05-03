@@ -1,5 +1,6 @@
 import { assign } from "lodash";
 import { saveAs } from "file-saver";
+import ExplorerAdapter from "@/adapter/explorer";
 
 const modules = {};
 
@@ -32,68 +33,13 @@ const store = {
   mutations: {},
   actions: {
     /** 选取文件 */
-    async selectFile({ dispatch, state }, {}) {
-      return await new Promise((resolve) => {
-        var input = document.createElement("input");
-        input.setAttribute("type", "file");
-        input.setAttribute(
-          "style",
-          "position: fixed; left: -100px; top: -100px;"
-        );
-        document.body.appendChild(input);
+    async selectFile({ dispatch, state }, params) {
 
-        var file = null;
-        var verfiyTimer = null;
-        var triggerVerify = () => {
-          if (verfiyTimer) return;
+      var data = await ExplorerAdapter.selectFile(params);
 
-          verfiyTimer = setTimeout(() => {
-            verfiyTimer = null;
+      this.$log(state, '选择文件', data);
 
-            if (file) {
-              var data = {
-                type: "input-file",
-                raw: file,
-              };
-
-              this.$log(state, "选择文件: " + file.name, data);
-            } else {
-              var data = null;
-
-              this.$log(state, "选择文件取消");
-            }
-
-            input.remove();
-
-            resolve(data);
-          }, 500);
-        };
-
-        input.focus();
-
-        input.onclick = (e) => {
-          setTimeout(() => {
-            // input.onblur = (e) => {
-            //   setTimeout(triggerVerify, 100);
-            // };
-
-            input.onfocus = (e) => {
-              setTimeout(triggerVerify, 100);
-            };
-          }, 300);
-
-          input.onchange = (e) => {
-            input.onblur = null;
-            input.onfocus = null;
-
-            file = e.target.files[0];
-
-            triggerVerify();
-          };
-        };
-
-        input.click();
-      });
+      return data;
     },
 
     /** 读取文件 */
@@ -114,7 +60,6 @@ const store = {
     },
 
     async saveFile({ dispatch, state }, { file, content }) {
-
       var blob = new Blob([content]);
 
       saveAs(blob, file.raw.name);

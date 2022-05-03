@@ -7,6 +7,7 @@
   "main": "src/main.js",
   "scripts": {
     "dev": "vue-cli-service serve --port=24061",
+    "dev:https": "vue-cli-service serve --port=24061 --https",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint"
   },
