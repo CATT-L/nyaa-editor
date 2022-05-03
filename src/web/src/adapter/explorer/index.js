@@ -52,5 +52,11 @@ export default {
     return { mode, data };
   },
 
-  async saveFile() {},
+  async saveFile({ file, content }) {
+    var mode = file.mode;
+    var adapter = await this.createAdapter(mode);
+    var data = await adapter.saveFile({ file, content });
+
+    return { mode, data };
+  },
 };

@@ -16,7 +16,7 @@ export default {
 
       reader.onload = (e) => {
         var data = {
-          isError: false,
+          isSuccess: true,
           message: "success",
           content: e.target.result,
         };
@@ -25,7 +25,7 @@ export default {
 
       reader.onerror = (e) => {
         var data = {
-          isError: true,
+          isSuccess: false,
           message: e.message,
           content: "",
         };
@@ -34,6 +34,16 @@ export default {
 
       reader.readAsText(await file.data.getFile());
     });
+  },
 
+  async saveFile({ file, content }) {
+    var blob = new Blob([content]);
+    var writable = await file.data.createWritable();
+
+    writable.write(blob);
+
+    writable.close();
+
+    return { isSuccess: true };
   },
 };

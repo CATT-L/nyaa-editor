@@ -1,3 +1,5 @@
+import { saveAs } from "file-saver";
+
 export default {
   async selectFile(params) {
     return await new Promise((resolve) => {
@@ -56,7 +58,7 @@ export default {
 
       reader.onload = (e) => {
         var data = {
-          isError: false,
+          isSuccess: true,
           message: "success",
           content: e.target.result,
         };
@@ -65,7 +67,7 @@ export default {
 
       reader.onerror = (e) => {
         var data = {
-          isError: true,
+          isSuccess: false,
           message: e.message,
           content: "",
         };
@@ -74,5 +76,13 @@ export default {
 
       reader.readAsText(file.data);
     });
+  },
+
+  async saveFile({ file, content }) {
+    var blob = new Blob([content]);
+
+    saveAs(blob, file.data.name);
+
+    return { isSuccess: true };
   },
 };

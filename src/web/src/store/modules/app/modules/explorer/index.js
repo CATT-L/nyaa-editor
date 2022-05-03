@@ -1,5 +1,5 @@
 import { assign } from "lodash";
-import { saveAs } from "file-saver";
+
 import ExplorerAdapter from "@/adapter/explorer";
 
 const modules = {};
@@ -43,33 +43,20 @@ const store = {
 
     /** 读取文件 */
     async readFile({ dispatch, state }, { file, opt = {} }) {
-      
       this.$log(state, "读取文件", { file, opt });
 
       var data = await ExplorerAdapter.readFile({ file, opt });
 
       return data;
-
-      return await new Promise((resolve, reject) => {
-        var reader = new FileReader();
-
-        reader.onload = (e) => {
-          var data = {
-            content: e.target.result,
-          };
-
-          resolve(data);
-        };
-
-        reader.readAsText(file.raw);
-      });
     },
 
     /** 保存文件 */
     async saveFile({ dispatch, state }, { file, content }) {
-      var blob = new Blob([content]);
+      this.$log(state, "保存文件", { file });
 
-      saveAs(blob, file.raw.name);
+      var data = await ExplorerAdapter.saveFile({ file, content });
+
+      return data;
     },
 
     __autoload({ dispatch, state }, prefix = "") {
